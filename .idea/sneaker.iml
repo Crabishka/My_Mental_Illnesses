@@ -24,6 +24,10 @@
       <excludeFolder url="file://$MODULE_DIR$/sneaker_client/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/sneaker_client/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/sneaker_client/build" />
+      <excludeFolder url="file://$MODULE_DIR$/sneaker_flutter/linux/flutter/ephemeral" />
+      <excludeFolder url="file://$MODULE_DIR$/sneaker_flutter/macos/Flutter/ephemeral" />
+      <excludeFolder url="file://$MODULE_DIR$/sneaker_flutter/windows/flutter/ephemeral" />
+      <excludeFolder url="file://$MODULE_DIR$/sneaker_flutter/.idea" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
