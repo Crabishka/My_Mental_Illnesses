@@ -1,8 +1,0 @@
-class: Product
-table: product
-fields:
-  name: String
-  description: String?
-  price: double
-  oldPrice: double?
-  pictures: List<String>?

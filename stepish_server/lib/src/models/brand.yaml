@@ -1,0 +1,11 @@
+class: Brand
+table: brand
+fields:
+  name: String
+  description: String?
+  price: double
+  oldPrice: double?
+  pictures: List<String>?
+  manufacturer: Manufacturer?, relation(name=brand_manufacturer)
+  comments: List<Comment>?, relation(name=brand_comments)
+  isAccepted: bool, default = false

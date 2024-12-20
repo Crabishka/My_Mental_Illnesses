@@ -4,7 +4,7 @@ import 'package:sneaker_client/sneaker_client.dart';
 const accessKey = 'ACCESS_KEY';
 const refreshKey = 'REFRESH_KEY';
 
-/// TODO: написать декоратор над AuthenticationKeyManager, которй будет менеджить рефреш
+/// TODO: написать декоратор над AuthenticationKeyManager, который будет менеджить рефреш
 class JwtAuthManager extends AuthenticationKeyManager {
   SharedPreferences? _sharedPreferences;
 

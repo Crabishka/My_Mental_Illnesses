@@ -1,0 +1,11 @@
+class: Comment
+table: comment
+fields:
+  name: String
+  user: User?, relation(name=user_comments)
+  brand: Brand?, relation(name=brand_comments)
+  acceptedBy: Moderator?, relation(name=moderator_comments)
+  description: String?
+  rating: double
+  pictures: List<String>?
+  isAccepted: bool, default = false

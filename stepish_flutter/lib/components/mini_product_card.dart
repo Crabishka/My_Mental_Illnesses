@@ -9,7 +9,7 @@ class MiniProductCard extends StatelessWidget {
     required this.product,
   });
 
-  final Product product;
+  final Brand product;
 
   @override
   Widget build(BuildContext context) {

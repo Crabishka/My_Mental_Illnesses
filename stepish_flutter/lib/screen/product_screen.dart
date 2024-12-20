@@ -21,12 +21,12 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  final BehaviorSubject<Product?> productStream = BehaviorSubject();
+  final BehaviorSubject<Brand?> productStream = BehaviorSubject();
 
   @override
   void initState() {
     super.initState();
-    client.productEndPoint.getProductById(widget.productId).then(
+    client.brandEndPoint.getProductById(widget.productId).then(
       (value) {
         productStream.value = value;
       },
@@ -36,7 +36,8 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<Product?>(
+
+      body: StreamBuilder<Brand?>(
           stream: productStream,
           builder: (context, snapshot) {
             final product = snapshot.data;

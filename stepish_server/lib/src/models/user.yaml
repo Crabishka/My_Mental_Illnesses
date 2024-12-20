@@ -1,0 +1,7 @@
+class: User
+table: users
+fields:
+  name: String
+  login: String
+  password: String
+  comments: List<Comment>?, relation(name=user_comments)

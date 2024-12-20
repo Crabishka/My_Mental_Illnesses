@@ -13,12 +13,12 @@ class FavouritesScreen extends StatefulWidget {
 }
 
 class _FavouritesScreenState extends State<FavouritesScreen> {
-  BehaviorSubject<List<Product>> productsStream = BehaviorSubject.seeded([]);
+  BehaviorSubject<List<Brand>> productsStream = BehaviorSubject.seeded([]);
 
   @override
   void initState() {
     super.initState();
-    client.productEndPoint.getAllProduct().then(
+    client.brandEndPoint.getAllProduct().then(
       (products) {
         productsStream.value = products.reversed.toList();
       },
@@ -28,7 +28,7 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<List<Product>>(
+      body: StreamBuilder<List<Brand>>(
           stream: productsStream,
           builder: (context, snapshot) {
             final products = snapshot.data;

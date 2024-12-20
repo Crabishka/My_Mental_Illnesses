@@ -1,0 +1,7 @@
+class: Manufacturer
+table: manufacturer
+fields:
+  name: String
+  description: String?
+  pictures: List<String>?
+  brands: List<Brand>?, relation(name=brand_manufacturer)

@@ -1,6 +1,7 @@
-example:
-  - hello:
-productEndPoint:
+brandEndPoint:
   - createProduct:
   - getAllProduct:
   - getProductById:
+example:
+  - hello:
+  - comments:

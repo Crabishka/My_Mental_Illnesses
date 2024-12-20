@@ -11,8 +11,37 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:sneaker_client/src/protocol/product.dart' as _i3;
+import 'package:sneaker_client/src/protocol/brand.dart' as _i3;
 import 'protocol.dart' as _i4;
+
+/// {@category Endpoint}
+class EndpointBrandEndPoint extends _i1.EndpointRef {
+  EndpointBrandEndPoint(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'brandEndPoint';
+
+  _i2.Future<void> createProduct(_i3.Brand product) =>
+      caller.callServerEndpoint<void>(
+        'brandEndPoint',
+        'createProduct',
+        {'product': product},
+      );
+
+  _i2.Future<List<_i3.Brand>> getAllProduct() =>
+      caller.callServerEndpoint<List<_i3.Brand>>(
+        'brandEndPoint',
+        'getAllProduct',
+        {},
+      );
+
+  _i2.Future<_i3.Brand?> getProductById(int id) =>
+      caller.callServerEndpoint<_i3.Brand?>(
+        'brandEndPoint',
+        'getProductById',
+        {'id': id},
+      );
+}
 
 /// {@category Endpoint}
 class EndpointExample extends _i1.EndpointRef {
@@ -26,34 +55,11 @@ class EndpointExample extends _i1.EndpointRef {
         'hello',
         {'name': name},
       );
-}
 
-/// {@category Endpoint}
-class EndpointProductEndPoint extends _i1.EndpointRef {
-  EndpointProductEndPoint(_i1.EndpointCaller caller) : super(caller);
-
-  @override
-  String get name => 'productEndPoint';
-
-  _i2.Future<void> createProduct(_i3.Product product) =>
-      caller.callServerEndpoint<void>(
-        'productEndPoint',
-        'createProduct',
-        {'product': product},
-      );
-
-  _i2.Future<List<_i3.Product>> getAllProduct() =>
-      caller.callServerEndpoint<List<_i3.Product>>(
-        'productEndPoint',
-        'getAllProduct',
+  _i2.Future<String> comments() => caller.callServerEndpoint<String>(
+        'example',
+        'comments',
         {},
-      );
-
-  _i2.Future<_i3.Product?> getProductById(int id) =>
-      caller.callServerEndpoint<_i3.Product?>(
-        'productEndPoint',
-        'getProductById',
-        {'id': id},
       );
 }
 
@@ -83,18 +89,18 @@ class Client extends _i1.ServerpodClientShared {
           disconnectStreamsOnLostInternetConnection:
               disconnectStreamsOnLostInternetConnection,
         ) {
+    brandEndPoint = EndpointBrandEndPoint(this);
     example = EndpointExample(this);
-    productEndPoint = EndpointProductEndPoint(this);
   }
+
+  late final EndpointBrandEndPoint brandEndPoint;
 
   late final EndpointExample example;
 
-  late final EndpointProductEndPoint productEndPoint;
-
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
+        'brandEndPoint': brandEndPoint,
         'example': example,
-        'productEndPoint': productEndPoint,
       };
 
   @override
