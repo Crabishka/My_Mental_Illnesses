@@ -81,7 +81,7 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'int',
         ),
         _i2.ColumnDefinition(
-          name: 'isAccepted',
+          name: 'is_accepted',
           columnType: _i2.ColumnType.boolean,
           isNullable: false,
           dartType: 'bool',
@@ -149,7 +149,7 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'int',
         ),
         _i2.ColumnDefinition(
-          name: 'acceptedById',
+          name: 'accepted_byId',
           columnType: _i2.ColumnType.bigint,
           isNullable: false,
           dartType: 'int',
@@ -173,7 +173,7 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'List<String>?',
         ),
         _i2.ColumnDefinition(
-          name: 'isAccepted',
+          name: 'is_accepted',
           columnType: _i2.ColumnType.boolean,
           isNullable: false,
           dartType: 'bool',
@@ -203,7 +203,7 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ForeignKeyDefinition(
           constraintName: 'comment_fk_2',
-          columns: ['acceptedById'],
+          columns: ['accepted_byId'],
           referenceTable: 'moderator',
           referenceTableSchema: 'public',
           referenceColumns: ['id'],

@@ -5,121 +5,141 @@ import 'package:sneaker_server/src/generated/protocol.dart';
 
 class ExampleEndpoint extends Endpoint {
   Future<String> hello(Session session, String name) async {
-    List<Manufacturer> manufacturers = [
-      Manufacturer(
-          name: 'Manufacturer A',
-          description: 'Description of Manufacturer A',
-          pictures: ['pictureA1.png', 'pictureA2.png']),
-      Manufacturer(name: 'Manufacturer B', description: 'Description of Manufacturer B', pictures: ['pictureB1.png']),
-      Manufacturer(
-          name: 'Manufacturer C',
-          description: 'Description of Manufacturer C',
-          pictures: ['pictureC1.png', 'pictureC2.png', 'pictureC3.png']),
-    ];
+    try {
+      final brand = await Brand.db.findById(session, 1);
+      if (brand == null) {
+        return 'Not Found';
+      }
+      // try {
+      //   await Future.any([
+      //     session.db.unsafeSimpleQuery(''
+      //         '''
+      //         BEGIN;
+      //         SELECT * FROM brand WHERE id = 1 FOR UPDATE;
+      //        pg_sleep(5);
+      //         COMMIT;
+      //         '''),
+      //     session.db.unsafeSimpleQuery(''
+      //         '''
+      //         BEGIN;
+      //         SELECT * FROM brand WHERE id = 1 FOR UPDATE;
+      //          COMMIT;
+      //         ''')
+      //   ]);
+      // } catch (e) {
+      //   print(e.toString());
+      // }
 
-    manufacturers = await Manufacturer.db.insert(session, manufacturers);
+      session.db.transaction((transaction) async {
+        try {
+          var brand = await Brand.db.findById(
+            session,
+            1,
+          );
+          print('Before First update ${brand!.price}');
+          await session.db.unsafeQuery(''
+              '''
+              BEGIN;
+              SELECT * FROM BRAND WHERE id = 1 for UPDATE;
+              UPDATE BRAND SET price = 300 WHERE ID = 1;
+              COMMIT;
+              ''');
 
-    List<Moderator> moderators = [
-      Moderator(name: 'Moderator A', login: 'modA', password: 'passwordA'),
-      Moderator(name: 'Moderator B', login: 'modB', password: 'passwordB'),
-    ];
+          // await Brand.db.updateRow(
+          //   session,
+          //   brand.copyWith(price: brand.price + 20),
+          // );
+          // brand = await Brand.db.findById(
+          //   session,
+          //   1,
+          // );
+          // print('After First update ${brand!.price}');
+        } catch (e) {
+          print(e.toString());
+        }
+      }, settings: TransactionSettings(isolationLevel: IsolationLevel.readUncommitted));
+      // Транзакция
+      await session.db.transaction((transaction) async {
+        try {
 
-    moderators = await Moderator.db.insert(session, moderators);
+          await session.db.unsafeQuery('SELECT * FROM BRAND WHERE id = 1 for UPDATE');
+          var brand = await Brand.db.findById(
+            session,
+            1,
+          );
+          print('Before second Read ${brand!.price}');
+          await Brand.db.updateRow(
+            session,
+            brand.copyWith(price: brand.price + 30),
+          );
+          brand = await Brand.db.findById(
+            session,
+            1,
+          );
+          print('After second Read ${brand!.price}');
+        } catch (e) {
+          print(e.toString());
+        }
+      }, settings: TransactionSettings(isolationLevel: IsolationLevel.readUncommitted));
+    } catch (e) {
+      print(e.toString());
+    }
 
-    List<User> users = [
-      User(name: 'User A', login: 'userA', password: 'passwordA'),
-      User(name: 'User B', login: 'userB', password: 'passwordB'),
-      User(name: 'User C', login: 'userC', password: 'passwordC'),
-    ];
-
-    users = await User.db.insert(session, users);
-
-    List<Brand> brands = [
-      Brand(
-        name: 'Brand A',
-        description: 'Description of Brand A',
-        price: 100.0,
-        oldPrice: 120.0,
-        pictures: ['brandA1.png', 'brandA2.png'],
-        manufacturer: manufacturers[0],
-        manufacturerId: manufacturers[0].id ?? -1,
-      ),
-      Brand(
-        name: 'Brand AA',
-        description: 'Description of Brand AA',
-        price: 100.0,
-        oldPrice: 120.0,
-        pictures: ['brandA1.png', 'brandA2.png'],
-        manufacturer: manufacturers[0],
-        manufacturerId: manufacturers[0].id ?? -1,
-      ),
-      Brand(
-        name: 'Brand AAA',
-        description: 'Description of Brand AA',
-        price: 100.0,
-        oldPrice: 120.0,
-        pictures: ['brandA1.png', 'brandA2.png'],
-        manufacturer: manufacturers[0],
-        manufacturerId: manufacturers[0].id ?? -1,
-      ),
-      Brand(
-        name: 'Brand B',
-        description: 'Description of Brand B',
-        price: 200.0,
-        pictures: ['brandB1.png', 'brandB2.png'],
-        manufacturer: manufacturers[1],
-        manufacturerId: manufacturers[1].id ?? -1,
-      ),
-      Brand(
-        name: 'Brand BB',
-        description: 'Description of Brand BB',
-        price: 200.0,
-        pictures: ['brandB1.png', 'brandB2.png'],
-        manufacturer: manufacturers[1],
-        manufacturerId: manufacturers[1].id ?? -1,
-      ),
-      Brand(
-        name: 'Brand BBB',
-        description: 'Description of Brand BBB',
-        price: 200.0,
-        pictures: ['brandB1.png', 'brandB2.png'],
-        manufacturer: manufacturers[1],
-        manufacturerId: manufacturers[1].id ?? -1,
-      ),
-      Brand(
-        name: 'Brand C',
-        description: 'Description of Brand C',
-        price: 300.0,
-        oldPrice: 350.0,
-        pictures: ['brandC1.png'],
-        manufacturer: manufacturers[2],
-        manufacturerId: manufacturers[2].id ?? -1,
-      ),
-      Brand(
-        name: 'Brand CC',
-        description: 'Description of Brand CC',
-        price: 300.0,
-        oldPrice: 350.0,
-        pictures: ['brandC1.png'],
-        manufacturer: manufacturers[2],
-        manufacturerId: manufacturers[2].id ?? -1,
-      ),
-      Brand(
-        name: 'Brand CCC',
-        description: 'Description of Brand CCC',
-        price: 300.0,
-        oldPrice: 350.0,
-        pictures: ['brandC1.png'],
-        manufacturer: manufacturers[2],
-        manufacturerId: manufacturers[2].id ?? -1,
-      ),
-    ];
-
-    brands = await Brand.db.insert(session, brands);
-
+    // session.db.transaction(
+    //   (transaction) async {
+    //     Brand.db.updateRow(
+    //       session,
+    //       brand.copyWith(
+    //         is_accepted: true,
+    //       ),
+    //     );
+    //   },
+    // );
+    //
+    // Brand.db.updateRow(
+    //   session,
+    //   brand.copyWith(
+    //     is_accepted: true,
+    //   ),
+    // );
+    //   await session.db.transaction(() async {
+    //     // Явная блокировка
+    //     await session.db.query('LOCK TABLE brand IN EXCLUSIVE MODE');
+    //
+    //     // Выполнение операций с брендом
+    //     await session.db.update('brand', {
+    //       'isAccepted': true,
+    //     }, where: 'id = ?', whereArgs: [brandId]);
+    //   });
+    // }
+    // session.db.unsafeQuery('''
+    //   SELECT * FROM comment  c
+    //     JOIN brand as b
+    //     ON b.id = brand_id
+    //     AND 4 > (
+    // 	    SELECT AVG(c.rating)
+    // 	    FROM comment as c
+    // 		    JOIN brand as nb
+    // 		    ON c.brand_id = nb.id
+    // 		    AND b.id = nb.id
+    //     )
+    //     INNER JOIN moderator m
+    //     ON m.id = accepted_by_id
+    //     AND (
+    //       SELECT COUNT(*)
+    //  		    FROM comment c_inner
+    //  		      WHERE c_inner.accepted_by_id = m.id
+    //  		      AND c_inner.is_accepted = TRUE)
+    //  		    > (
+    //  		  SELECT COUNT(*)
+    // 		    FROM comment c_inner
+    // 		    WHERE c_inner.accepted_by_id = m.id
+    // 		    AND c_inner.is_accepted = FALSE
+    //     ) * 2
+    //   WHERE is_accepted = TRUE;
+    //   ''');
     return 'Hello $name';
   }
-
 
   Future<String> comments(Session session) async {
     final moderators = await Moderator.db.find(session);
@@ -127,27 +147,32 @@ class ExampleEndpoint extends Endpoint {
     var brands = await Brand.db.find(session);
     final random = Random(42);
 
-    for (int i = 0; i < 10; i++) {
-      final moderatorId = random.nextInt(1000) % (moderators.length);
+    for (int i = 0; i < 13; i++) {
+      final moderatorId = 1;
       final brand = brands[random.nextInt(1000) % brands.length];
       final userId = random.nextInt(1000) % (users.length);
       final user = users[userId];
       final moderator = moderators[moderatorId];
+      final rating = (random.nextInt(30) + 1) / 10.0;
 
       final comment = Comment(
         name: getRandomString(10),
         description: getRandomString(140),
-        rating: (random.nextInt(50) + 1) / 10.0,
+        rating: rating,
         pictures: ['commentA1.png'],
         user: user,
-        isAccepted: true,
+        is_accepted: true,
         brand: brand,
         userId: user.id!,
         brandId: brand.id!,
-        acceptedById: moderator.id!,
+        accepted_byId: moderator.id!,
       );
 
-      Comment.db.insertRow(session, comment);
+      try {
+        Comment.db.insertRow(session, comment);
+      } catch (e) {
+        print(e);
+      }
     }
 
     print('Done');
