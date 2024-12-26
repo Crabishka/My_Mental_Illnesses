@@ -13,14 +13,21 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'brand.dart' as _i3;
 import 'comment.dart' as _i4;
-import 'manufacturer.dart' as _i5;
-import 'moderator.dart' as _i6;
-import 'user.dart' as _i7;
-import 'package:sneaker_server/src/generated/brand.dart' as _i8;
+import 'exception/comment_create_exception.dart' as _i5;
+import 'manufacturer.dart' as _i6;
+import 'moderator.dart' as _i7;
+import 'serialize_string.dart' as _i8;
+import 'token.dart' as _i9;
+import 'user.dart' as _i10;
+import 'package:sneaker_server/src/generated/brand.dart' as _i11;
+import 'package:sneaker_server/src/generated/comment.dart' as _i12;
 export 'brand.dart';
 export 'comment.dart';
+export 'exception/comment_create_exception.dart';
 export 'manufacturer.dart';
 export 'moderator.dart';
+export 'serialize_string.dart';
+export 'token.dart';
 export 'user.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
@@ -81,7 +88,7 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'int',
         ),
         _i2.ColumnDefinition(
-          name: 'is_accepted',
+          name: 'isAccepted',
           columnType: _i2.ColumnType.boolean,
           isNullable: false,
           dartType: 'bool',
@@ -149,12 +156,6 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'int',
         ),
         _i2.ColumnDefinition(
-          name: 'accepted_byId',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'int',
-        ),
-        _i2.ColumnDefinition(
           name: 'description',
           columnType: _i2.ColumnType.text,
           isNullable: true,
@@ -173,11 +174,10 @@ class Protocol extends _i1.SerializationManagerServer {
           dartType: 'List<String>?',
         ),
         _i2.ColumnDefinition(
-          name: 'is_accepted',
+          name: 'isAccepted',
           columnType: _i2.ColumnType.boolean,
-          isNullable: false,
-          dartType: 'bool',
-          columnDefault: 'false',
+          isNullable: true,
+          dartType: 'bool?',
         ),
       ],
       foreignKeys: [
@@ -201,20 +201,54 @@ class Protocol extends _i1.SerializationManagerServer {
           onDelete: _i2.ForeignKeyAction.noAction,
           matchType: null,
         ),
-        _i2.ForeignKeyDefinition(
-          constraintName: 'comment_fk_2',
-          columns: ['accepted_byId'],
-          referenceTable: 'moderator',
-          referenceTableSchema: 'public',
-          referenceColumns: ['id'],
-          onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
-          matchType: null,
-        ),
       ],
       indexes: [
         _i2.IndexDefinition(
           indexName: 'comment_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'jwt_token',
+      dartName: 'JwtToken',
+      schema: 'public',
+      module: 'sneaker',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'jwt_token_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'accessToken',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'refreshToken',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'jwt_token_pkey',
           tableSpace: null,
           elements: [
             _i2.IndexElementDefinition(
@@ -330,6 +364,44 @@ class Protocol extends _i1.SerializationManagerServer {
       managed: true,
     ),
     _i2.TableDefinition(
+      name: 'serialize_string',
+      dartName: 'SerializeString',
+      schema: 'public',
+      module: 'sneaker',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'serialize_string_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'string',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'serialize_string_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
       name: 'users',
       dartName: 'User',
       schema: 'public',
@@ -351,14 +423,14 @@ class Protocol extends _i1.SerializationManagerServer {
         _i2.ColumnDefinition(
           name: 'login',
           columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          isNullable: true,
+          dartType: 'String?',
         ),
         _i2.ColumnDefinition(
           name: 'password',
           columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
+          isNullable: true,
+          dartType: 'String?',
         ),
       ],
       foreignKeys: [],
@@ -394,14 +466,23 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i4.Comment) {
       return _i4.Comment.fromJson(data) as T;
     }
-    if (t == _i5.Manufacturer) {
-      return _i5.Manufacturer.fromJson(data) as T;
+    if (t == _i5.CommentCreateException) {
+      return _i5.CommentCreateException.fromJson(data) as T;
     }
-    if (t == _i6.Moderator) {
-      return _i6.Moderator.fromJson(data) as T;
+    if (t == _i6.Manufacturer) {
+      return _i6.Manufacturer.fromJson(data) as T;
     }
-    if (t == _i7.User) {
-      return _i7.User.fromJson(data) as T;
+    if (t == _i7.Moderator) {
+      return _i7.Moderator.fromJson(data) as T;
+    }
+    if (t == _i8.SerializeString) {
+      return _i8.SerializeString.fromJson(data) as T;
+    }
+    if (t == _i9.JwtToken) {
+      return _i9.JwtToken.fromJson(data) as T;
+    }
+    if (t == _i10.User) {
+      return _i10.User.fromJson(data) as T;
     }
     if (t == _i1.getType<_i3.Brand?>()) {
       return (data != null ? _i3.Brand.fromJson(data) : null) as T;
@@ -409,14 +490,24 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i4.Comment?>()) {
       return (data != null ? _i4.Comment.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i5.Manufacturer?>()) {
-      return (data != null ? _i5.Manufacturer.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i5.CommentCreateException?>()) {
+      return (data != null ? _i5.CommentCreateException.fromJson(data) : null)
+          as T;
     }
-    if (t == _i1.getType<_i6.Moderator?>()) {
-      return (data != null ? _i6.Moderator.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i6.Manufacturer?>()) {
+      return (data != null ? _i6.Manufacturer.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i7.User?>()) {
-      return (data != null ? _i7.User.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i7.Moderator?>()) {
+      return (data != null ? _i7.Moderator.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i8.SerializeString?>()) {
+      return (data != null ? _i8.SerializeString.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i9.JwtToken?>()) {
+      return (data != null ? _i9.JwtToken.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i10.User?>()) {
+      return (data != null ? _i10.User.fromJson(data) : null) as T;
     }
     if (t == _i1.getType<List<String>?>()) {
       return (data != null
@@ -448,13 +539,12 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<_i4.Comment>(e)).toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i4.Comment>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<_i4.Comment>(e)).toList()
-          : null) as dynamic;
+    if (t == List<_i11.Brand>) {
+      return (data as List).map((e) => deserialize<_i11.Brand>(e)).toList()
+          as dynamic;
     }
-    if (t == List<_i8.Brand>) {
-      return (data as List).map((e) => deserialize<_i8.Brand>(e)).toList()
+    if (t == List<_i12.Comment>) {
+      return (data as List).map((e) => deserialize<_i12.Comment>(e)).toList()
           as dynamic;
     }
     try {
@@ -473,13 +563,22 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i4.Comment) {
       return 'Comment';
     }
-    if (data is _i5.Manufacturer) {
+    if (data is _i5.CommentCreateException) {
+      return 'CommentCreateException';
+    }
+    if (data is _i6.Manufacturer) {
       return 'Manufacturer';
     }
-    if (data is _i6.Moderator) {
+    if (data is _i7.Moderator) {
       return 'Moderator';
     }
-    if (data is _i7.User) {
+    if (data is _i8.SerializeString) {
+      return 'SerializeString';
+    }
+    if (data is _i9.JwtToken) {
+      return 'JwtToken';
+    }
+    if (data is _i10.User) {
       return 'User';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -501,14 +600,23 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'Comment') {
       return deserialize<_i4.Comment>(data['data']);
     }
+    if (dataClassName == 'CommentCreateException') {
+      return deserialize<_i5.CommentCreateException>(data['data']);
+    }
     if (dataClassName == 'Manufacturer') {
-      return deserialize<_i5.Manufacturer>(data['data']);
+      return deserialize<_i6.Manufacturer>(data['data']);
     }
     if (dataClassName == 'Moderator') {
-      return deserialize<_i6.Moderator>(data['data']);
+      return deserialize<_i7.Moderator>(data['data']);
+    }
+    if (dataClassName == 'SerializeString') {
+      return deserialize<_i8.SerializeString>(data['data']);
+    }
+    if (dataClassName == 'JwtToken') {
+      return deserialize<_i9.JwtToken>(data['data']);
     }
     if (dataClassName == 'User') {
-      return deserialize<_i7.User>(data['data']);
+      return deserialize<_i10.User>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
@@ -530,12 +638,16 @@ class Protocol extends _i1.SerializationManagerServer {
         return _i3.Brand.t;
       case _i4.Comment:
         return _i4.Comment.t;
-      case _i5.Manufacturer:
-        return _i5.Manufacturer.t;
-      case _i6.Moderator:
-        return _i6.Moderator.t;
-      case _i7.User:
-        return _i7.User.t;
+      case _i6.Manufacturer:
+        return _i6.Manufacturer.t;
+      case _i7.Moderator:
+        return _i7.Moderator.t;
+      case _i8.SerializeString:
+        return _i8.SerializeString.t;
+      case _i9.JwtToken:
+        return _i9.JwtToken.t;
+      case _i10.User:
+        return _i10.User.t;
     }
     return null;
   }

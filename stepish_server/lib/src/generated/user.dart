@@ -16,16 +16,16 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
   User._({
     this.id,
     required this.name,
-    required this.login,
-    required this.password,
+    this.login,
+    this.password,
     this.comments,
   });
 
   factory User({
     int? id,
     required String name,
-    required String login,
-    required String password,
+    String? login,
+    String? password,
     List<_i2.Comment>? comments,
   }) = _UserImpl;
 
@@ -33,8 +33,8 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
     return User(
       id: jsonSerialization['id'] as int?,
       name: jsonSerialization['name'] as String,
-      login: jsonSerialization['login'] as String,
-      password: jsonSerialization['password'] as String,
+      login: jsonSerialization['login'] as String?,
+      password: jsonSerialization['password'] as String?,
       comments: (jsonSerialization['comments'] as List?)
           ?.map((e) => _i2.Comment.fromJson((e as Map<String, dynamic>)))
           .toList(),
@@ -50,9 +50,9 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
 
   String name;
 
-  String login;
+  String? login;
 
-  String password;
+  String? password;
 
   List<_i2.Comment>? comments;
 
@@ -71,8 +71,8 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
     return {
       if (id != null) 'id': id,
       'name': name,
-      'login': login,
-      'password': password,
+      if (login != null) 'login': login,
+      if (password != null) 'password': password,
       if (comments != null)
         'comments': comments?.toJson(valueToJson: (v) => v.toJson()),
     };
@@ -83,8 +83,6 @@ abstract class User implements _i1.TableRow, _i1.ProtocolSerialization {
     return {
       if (id != null) 'id': id,
       'name': name,
-      'login': login,
-      'password': password,
       if (comments != null)
         'comments': comments?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
@@ -126,8 +124,8 @@ class _UserImpl extends User {
   _UserImpl({
     int? id,
     required String name,
-    required String login,
-    required String password,
+    String? login,
+    String? password,
     List<_i2.Comment>? comments,
   }) : super._(
           id: id,
@@ -141,15 +139,15 @@ class _UserImpl extends User {
   User copyWith({
     Object? id = _Undefined,
     String? name,
-    String? login,
-    String? password,
+    Object? login = _Undefined,
+    Object? password = _Undefined,
     Object? comments = _Undefined,
   }) {
     return User(
       id: id is int? ? id : this.id,
       name: name ?? this.name,
-      login: login ?? this.login,
-      password: password ?? this.password,
+      login: login is String? ? login : this.login,
+      password: password is String? ? password : this.password,
       comments: comments is List<_i2.Comment>?
           ? comments
           : this.comments?.map((e0) => e0.copyWith()).toList(),

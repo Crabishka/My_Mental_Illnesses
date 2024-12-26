@@ -10,7 +10,6 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import 'comment.dart' as _i2;
 
 abstract class Moderator implements _i1.SerializableModel {
   Moderator._({
@@ -18,7 +17,6 @@ abstract class Moderator implements _i1.SerializableModel {
     required this.name,
     required this.login,
     required this.password,
-    this.accepted_comments,
   });
 
   factory Moderator({
@@ -26,7 +24,6 @@ abstract class Moderator implements _i1.SerializableModel {
     required String name,
     required String login,
     required String password,
-    List<_i2.Comment>? accepted_comments,
   }) = _ModeratorImpl;
 
   factory Moderator.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -35,9 +32,6 @@ abstract class Moderator implements _i1.SerializableModel {
       name: jsonSerialization['name'] as String,
       login: jsonSerialization['login'] as String,
       password: jsonSerialization['password'] as String,
-      accepted_comments: (jsonSerialization['accepted_comments'] as List?)
-          ?.map((e) => _i2.Comment.fromJson((e as Map<String, dynamic>)))
-          .toList(),
     );
   }
 
@@ -52,14 +46,11 @@ abstract class Moderator implements _i1.SerializableModel {
 
   String password;
 
-  List<_i2.Comment>? accepted_comments;
-
   Moderator copyWith({
     int? id,
     String? name,
     String? login,
     String? password,
-    List<_i2.Comment>? accepted_comments,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -68,9 +59,6 @@ abstract class Moderator implements _i1.SerializableModel {
       'name': name,
       'login': login,
       'password': password,
-      if (accepted_comments != null)
-        'accepted_comments':
-            accepted_comments?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -88,13 +76,11 @@ class _ModeratorImpl extends Moderator {
     required String name,
     required String login,
     required String password,
-    List<_i2.Comment>? accepted_comments,
   }) : super._(
           id: id,
           name: name,
           login: login,
           password: password,
-          accepted_comments: accepted_comments,
         );
 
   @override
@@ -103,16 +89,12 @@ class _ModeratorImpl extends Moderator {
     String? name,
     String? login,
     String? password,
-    Object? accepted_comments = _Undefined,
   }) {
     return Moderator(
       id: id is int? ? id : this.id,
       name: name ?? this.name,
       login: login ?? this.login,
       password: password ?? this.password,
-      accepted_comments: accepted_comments is List<_i2.Comment>?
-          ? accepted_comments
-          : this.accepted_comments?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }

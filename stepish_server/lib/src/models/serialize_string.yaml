@@ -1,0 +1,4 @@
+class: SerializeString
+table: serialize_string
+fields:
+  string: String

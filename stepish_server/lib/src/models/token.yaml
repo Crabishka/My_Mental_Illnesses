@@ -1,0 +1,5 @@
+class: JwtToken
+table: jwt_token
+fields:
+  accessToken: String
+  refreshToken: String?

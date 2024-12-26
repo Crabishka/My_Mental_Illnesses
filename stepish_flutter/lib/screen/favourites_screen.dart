@@ -18,7 +18,7 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
   @override
   void initState() {
     super.initState();
-    client.brandEndPoint.getAllProduct().then(
+    client.brandEndPoint.getAllBrands().then(
       (products) {
         productsStream.value = products.reversed.toList();
       },
@@ -45,7 +45,7 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
               itemCount: products.length,
               itemBuilder: (BuildContext context, int index) {
                 final product = products[index];
-                return MiniProductCard(product: product);
+                return MiniProductCard(brand: product);
               },
             );
           }),

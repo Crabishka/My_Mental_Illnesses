@@ -1,7 +1,20 @@
+authEndPoint:
+  - createComment:
 brandEndPoint:
-  - createProduct:
-  - getAllProduct:
-  - getProductById:
+  - createBrand:
+  - getAllBrands:
+  - getBrandById:
+commentEndPoint:
+  - createComment:
+  - getAcceptedCommentByBrand:
+  - getUnAcceptedCommentByBrand:
+  - getAllUnAcceptedCommentByBrand:
+  - getAllCommentByBrand:
+  - getCommentById:
+  - deleteCommentById:
 example:
   - hello:
   - comments:
+sessionEndPoint:
+  - saveComment:
+  - getComment:

@@ -24,8 +24,8 @@ abstract class Brand implements _i1.SerializableModel {
     required this.manufacturerId,
     this.manufacturer,
     this.comments,
-    bool? is_accepted,
-  }) : is_accepted = is_accepted ?? false;
+    bool? isAccepted,
+  }) : isAccepted = isAccepted ?? false;
 
   factory Brand({
     int? id,
@@ -37,7 +37,7 @@ abstract class Brand implements _i1.SerializableModel {
     required int manufacturerId,
     _i2.Manufacturer? manufacturer,
     List<_i3.Comment>? comments,
-    bool? is_accepted,
+    bool? isAccepted,
   }) = _BrandImpl;
 
   factory Brand.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -58,7 +58,7 @@ abstract class Brand implements _i1.SerializableModel {
       comments: (jsonSerialization['comments'] as List?)
           ?.map((e) => _i3.Comment.fromJson((e as Map<String, dynamic>)))
           .toList(),
-      is_accepted: jsonSerialization['is_accepted'] as bool,
+      isAccepted: jsonSerialization['isAccepted'] as bool,
     );
   }
 
@@ -83,7 +83,7 @@ abstract class Brand implements _i1.SerializableModel {
 
   List<_i3.Comment>? comments;
 
-  bool is_accepted;
+  bool isAccepted;
 
   Brand copyWith({
     int? id,
@@ -95,7 +95,7 @@ abstract class Brand implements _i1.SerializableModel {
     int? manufacturerId,
     _i2.Manufacturer? manufacturer,
     List<_i3.Comment>? comments,
-    bool? is_accepted,
+    bool? isAccepted,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -110,7 +110,7 @@ abstract class Brand implements _i1.SerializableModel {
       if (manufacturer != null) 'manufacturer': manufacturer?.toJson(),
       if (comments != null)
         'comments': comments?.toJson(valueToJson: (v) => v.toJson()),
-      'is_accepted': is_accepted,
+      'isAccepted': isAccepted,
     };
   }
 
@@ -133,7 +133,7 @@ class _BrandImpl extends Brand {
     required int manufacturerId,
     _i2.Manufacturer? manufacturer,
     List<_i3.Comment>? comments,
-    bool? is_accepted,
+    bool? isAccepted,
   }) : super._(
           id: id,
           name: name,
@@ -144,7 +144,7 @@ class _BrandImpl extends Brand {
           manufacturerId: manufacturerId,
           manufacturer: manufacturer,
           comments: comments,
-          is_accepted: is_accepted,
+          isAccepted: isAccepted,
         );
 
   @override
@@ -158,7 +158,7 @@ class _BrandImpl extends Brand {
     int? manufacturerId,
     Object? manufacturer = _Undefined,
     Object? comments = _Undefined,
-    bool? is_accepted,
+    bool? isAccepted,
   }) {
     return Brand(
       id: id is int? ? id : this.id,
@@ -176,7 +176,7 @@ class _BrandImpl extends Brand {
       comments: comments is List<_i3.Comment>?
           ? comments
           : this.comments?.map((e0) => e0.copyWith()).toList(),
-      is_accepted: is_accepted ?? this.is_accepted,
+      isAccepted: isAccepted ?? this.isAccepted,
     );
   }
 }

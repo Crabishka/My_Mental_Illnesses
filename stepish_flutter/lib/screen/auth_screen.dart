@@ -4,24 +4,19 @@ import 'package:sneaker_flutter/components/mini_product_card.dart';
 import 'package:sneaker_flutter/main.dart';
 import 'package:sneaker_client/sneaker_client.dart';
 
-class CatalogScreen extends StatefulWidget {
-  const CatalogScreen({super.key});
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key});
 
   @override
-  State<CatalogScreen> createState() => _CatalogScreenState();
+  State<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _CatalogScreenState extends State<CatalogScreen> {
+class _AuthScreenState extends State<AuthScreen> {
   BehaviorSubject<List<Brand>> productsStream = BehaviorSubject.seeded([]);
 
   @override
   void initState() {
     super.initState();
-    client.brandEndPoint.getAllBrands().then(
-      (products) {
-        productsStream.value = products;
-      },
-    );
   }
 
   @override
@@ -29,7 +24,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
     return RefreshIndicator(
       onRefresh: () async {
         client.brandEndPoint.getAllBrands().then(
-          (products) {
+              (products) {
             productsStream.value = products;
           },
         );

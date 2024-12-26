@@ -1,0 +1,4 @@
+exception: CommentCreateException
+fields:
+  message: String
+  errorType: String

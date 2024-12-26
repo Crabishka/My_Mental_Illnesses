@@ -2,6 +2,6 @@ class: User
 table: users
 fields:
   name: String
-  login: String
-  password: String
+  login: String?, scope=serverOnly
+  password: String?, scope=serverOnly
   comments: List<Comment>?, relation(name=user_comments)

@@ -4,8 +4,8 @@ fields:
   name: String
   user: User?, relation(name=user_comments)
   brand: Brand?, relation(name=brand_comments)
-  accepted_by: Moderator?, relation(name=moderator_comments)
+#  acceptedBy: Moderator?, relation(name=moderator_comments), scope=serverOnly
   description: String?
   rating: double
   pictures: List<String>?
-  is_accepted: bool, default = false
+  isAccepted: bool?,  scope=serverOnly

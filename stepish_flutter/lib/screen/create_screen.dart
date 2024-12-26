@@ -4,6 +4,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:sneaker_flutter/main.dart';
 import 'package:sneaker_flutter/utils/snackbar_extension.dart';
 import 'package:sneaker_client/sneaker_client.dart';
+
 class CreateScreen extends StatefulWidget {
   const CreateScreen({super.key});
 
@@ -12,6 +13,8 @@ class CreateScreen extends StatefulWidget {
 }
 
 class _CreateScreenState extends State<CreateScreen> {
+  final _formKey = GlobalKey<FormState>();
+
   final TextEditingController nameController = TextEditingController();
   final BehaviorSubject<String?> nameErrorController = BehaviorSubject();
 
@@ -27,86 +30,67 @@ class _CreateScreenState extends State<CreateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              client.example.hello(')');
-            },
-            child: Text('Сгенерить базу'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              InputTextField(
+                controller: nameController,
+                labelText: 'Название товара',
+                hintText: 'Например, новые модные ботинки',
+                textInputType: TextInputType.text,
+                errorTextController: nameErrorController,
+              ),
+              const Gap(8),
+              InputTextField(
+                controller: descriptionController,
+                labelText: 'Описание товара',
+                hintText: 'Например, новые модные ботинки прекрасно подойдут для начала сезона...',
+                textInputType: TextInputType.text,
+                errorTextController: descriptionErrorController,
+              ),
+              const Gap(8),
+              InputTextField(
+                controller: priceController,
+                labelText: 'Стоимость товара',
+                hintText: '1990',
+                suffixText: '₽',
+                textInputType: TextInputType.number,
+                errorTextController: priceErrorController,
+              ),
+              const Gap(8),
+              InputTextField(
+                controller: picturesController,
+                expands: true,
+                labelText: 'Ссылки на картинки',
+                hintText: 'Вводите ссылки на каждую картинку на новой строке или через проблем',
+                textInputType: TextInputType.text,
+                errorTextController: picturesErrorController,
+              ),
+              const Gap(16),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    return;
+                  }
+
+                  final isCreate = create();
+                  if (!isCreate) {
+                    context.showSnackBar('Товар не был создан');
+                    return;
+                  }
+                  context.showSnackBar('Товар успешно создан');
+                  clear();
+                },
+                child: Text('Создать товар'),
+              ),
+            ],
           ),
-          ElevatedButton(
-            onPressed: () {
-              client.example.comments();
-            },
-            child: Text('Сгенерить комменты'),
-          ),
-        ],
+        ),
       ),
     );
-    // return Scaffold(
-    //   body: Padding(
-    //     padding: const EdgeInsets.all(16.0),
-    //     child: Column(
-    //       children: [
-    //         InputTextField(
-    //           controller: nameController,
-    //           labelText: 'Название товара',
-    //           hintText: 'Например, новые модные ботинки',
-    //           textInputType: TextInputType.text,
-    //           errorTextController: nameErrorController,
-    //         ),
-    //         const Gap(8),
-    //         InputTextField(
-    //           controller: descriptionController,
-    //           labelText: 'Описание товара',
-    //           hintText: 'Например, новые модные ботинки прекрасно подойдут для начала сезона...',
-    //           textInputType: TextInputType.text,
-    //           errorTextController: descriptionErrorController,
-    //         ),
-    //         const Gap(8),
-    //         InputTextField(
-    //           controller: priceController,
-    //           labelText: 'Стоимость товара',
-    //           hintText: '1990',
-    //           suffixText: '₽',
-    //           textInputType: TextInputType.number,
-    //           errorTextController: priceErrorController,
-    //         ),
-    //         const Gap(8),
-    //         InputTextField(
-    //           controller: picturesController,
-    //           expands: true,
-    //           labelText: 'Ссылки на картинки',
-    //           hintText: 'Вводите ссылки на каждую картинку на новой строке или через проблем',
-    //           textInputType: TextInputType.text,
-    //           errorTextController: picturesErrorController,
-    //         ),
-    //         const Gap(16),
-    //         ElevatedButton(
-    //           onPressed: () {
-    //             final isValid = validate();
-    //             if (!isValid) {
-    //               /// TODO: исправить формулировку текста
-    //               context.showSnackBar('Необходимо исправить ошибки в заявке');
-    //               return;
-    //             }
-    //
-    //             /// TODO: переписать на номер и текст ошибки
-    //             final isCreate = create();
-    //             if (!isCreate) {
-    //               context.showSnackBar('Товар не был создан');
-    //               return;
-    //             }
-    //             context.showSnackBar('Товар успешно создан');
-    //             clear();
-    //           },
-    //           child: Text('Создать товар'),
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 
   bool validate() {
@@ -137,7 +121,7 @@ class _CreateScreenState extends State<CreateScreen> {
 
   bool create() {
     try {
-      client.brandEndPoint.createProduct(
+      client.brandEndPoint.createBrand(
         Brand(
           name: nameController.text,
           price: double.parse(priceController.text),
@@ -185,7 +169,7 @@ class InputTextField extends StatelessWidget {
     return StreamBuilder<String?>(
       stream: errorTextController,
       builder: (context, errorText) {
-        return TextField(
+        return TextFormField(
           maxLines: expands == false ? 1 : 4,
           minLines: 1,
           controller: controller,
@@ -193,11 +177,9 @@ class InputTextField extends StatelessWidget {
           onChanged: (value) {
             errorTextController.value = null;
           },
-
           decoration: InputDecoration(
             labelText: labelText,
             hintText: hintText,
-
             suffixText: suffixText,
             errorText: errorText.data,
           ),

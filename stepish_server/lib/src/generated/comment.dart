@@ -12,7 +12,6 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'user.dart' as _i2;
 import 'brand.dart' as _i3;
-import 'moderator.dart' as _i4;
 
 abstract class Comment implements _i1.TableRow, _i1.ProtocolSerialization {
   Comment._({
@@ -22,13 +21,11 @@ abstract class Comment implements _i1.TableRow, _i1.ProtocolSerialization {
     this.user,
     required this.brandId,
     this.brand,
-    required this.accepted_byId,
-    this.accepted_by,
     this.description,
     required this.rating,
     this.pictures,
-    bool? is_accepted,
-  }) : is_accepted = is_accepted ?? false;
+    this.isAccepted,
+  });
 
   factory Comment({
     int? id,
@@ -37,12 +34,10 @@ abstract class Comment implements _i1.TableRow, _i1.ProtocolSerialization {
     _i2.User? user,
     required int brandId,
     _i3.Brand? brand,
-    required int accepted_byId,
-    _i4.Moderator? accepted_by,
     String? description,
     required double rating,
     List<String>? pictures,
-    bool? is_accepted,
+    bool? isAccepted,
   }) = _CommentImpl;
 
   factory Comment.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -59,17 +54,12 @@ abstract class Comment implements _i1.TableRow, _i1.ProtocolSerialization {
           ? null
           : _i3.Brand.fromJson(
               (jsonSerialization['brand'] as Map<String, dynamic>)),
-      accepted_byId: jsonSerialization['accepted_byId'] as int,
-      accepted_by: jsonSerialization['accepted_by'] == null
-          ? null
-          : _i4.Moderator.fromJson(
-              (jsonSerialization['accepted_by'] as Map<String, dynamic>)),
       description: jsonSerialization['description'] as String?,
       rating: (jsonSerialization['rating'] as num).toDouble(),
       pictures: (jsonSerialization['pictures'] as List?)
           ?.map((e) => e as String)
           .toList(),
-      is_accepted: jsonSerialization['is_accepted'] as bool,
+      isAccepted: jsonSerialization['isAccepted'] as bool?,
     );
   }
 
@@ -90,17 +80,13 @@ abstract class Comment implements _i1.TableRow, _i1.ProtocolSerialization {
 
   _i3.Brand? brand;
 
-  int accepted_byId;
-
-  _i4.Moderator? accepted_by;
-
   String? description;
 
   double rating;
 
   List<String>? pictures;
 
-  bool is_accepted;
+  bool? isAccepted;
 
   @override
   _i1.Table get table => t;
@@ -112,12 +98,10 @@ abstract class Comment implements _i1.TableRow, _i1.ProtocolSerialization {
     _i2.User? user,
     int? brandId,
     _i3.Brand? brand,
-    int? accepted_byId,
-    _i4.Moderator? accepted_by,
     String? description,
     double? rating,
     List<String>? pictures,
-    bool? is_accepted,
+    bool? isAccepted,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -128,12 +112,10 @@ abstract class Comment implements _i1.TableRow, _i1.ProtocolSerialization {
       if (user != null) 'user': user?.toJson(),
       'brandId': brandId,
       if (brand != null) 'brand': brand?.toJson(),
-      'accepted_byId': accepted_byId,
-      if (accepted_by != null) 'accepted_by': accepted_by?.toJson(),
       if (description != null) 'description': description,
       'rating': rating,
       if (pictures != null) 'pictures': pictures?.toJson(),
-      'is_accepted': is_accepted,
+      if (isAccepted != null) 'isAccepted': isAccepted,
     };
   }
 
@@ -146,24 +128,19 @@ abstract class Comment implements _i1.TableRow, _i1.ProtocolSerialization {
       if (user != null) 'user': user?.toJsonForProtocol(),
       'brandId': brandId,
       if (brand != null) 'brand': brand?.toJsonForProtocol(),
-      'accepted_byId': accepted_byId,
-      if (accepted_by != null) 'accepted_by': accepted_by?.toJsonForProtocol(),
       if (description != null) 'description': description,
       'rating': rating,
       if (pictures != null) 'pictures': pictures?.toJson(),
-      'is_accepted': is_accepted,
     };
   }
 
   static CommentInclude include({
     _i2.UserInclude? user,
     _i3.BrandInclude? brand,
-    _i4.ModeratorInclude? accepted_by,
   }) {
     return CommentInclude._(
       user: user,
       brand: brand,
-      accepted_by: accepted_by,
     );
   }
 
@@ -203,12 +180,10 @@ class _CommentImpl extends Comment {
     _i2.User? user,
     required int brandId,
     _i3.Brand? brand,
-    required int accepted_byId,
-    _i4.Moderator? accepted_by,
     String? description,
     required double rating,
     List<String>? pictures,
-    bool? is_accepted,
+    bool? isAccepted,
   }) : super._(
           id: id,
           name: name,
@@ -216,12 +191,10 @@ class _CommentImpl extends Comment {
           user: user,
           brandId: brandId,
           brand: brand,
-          accepted_byId: accepted_byId,
-          accepted_by: accepted_by,
           description: description,
           rating: rating,
           pictures: pictures,
-          is_accepted: is_accepted,
+          isAccepted: isAccepted,
         );
 
   @override
@@ -232,12 +205,10 @@ class _CommentImpl extends Comment {
     Object? user = _Undefined,
     int? brandId,
     Object? brand = _Undefined,
-    int? accepted_byId,
-    Object? accepted_by = _Undefined,
     Object? description = _Undefined,
     double? rating,
     Object? pictures = _Undefined,
-    bool? is_accepted,
+    Object? isAccepted = _Undefined,
   }) {
     return Comment(
       id: id is int? ? id : this.id,
@@ -246,16 +217,12 @@ class _CommentImpl extends Comment {
       user: user is _i2.User? ? user : this.user?.copyWith(),
       brandId: brandId ?? this.brandId,
       brand: brand is _i3.Brand? ? brand : this.brand?.copyWith(),
-      accepted_byId: accepted_byId ?? this.accepted_byId,
-      accepted_by: accepted_by is _i4.Moderator?
-          ? accepted_by
-          : this.accepted_by?.copyWith(),
       description: description is String? ? description : this.description,
       rating: rating ?? this.rating,
       pictures: pictures is List<String>?
           ? pictures
           : this.pictures?.map((e0) => e0).toList(),
-      is_accepted: is_accepted ?? this.is_accepted,
+      isAccepted: isAccepted is bool? ? isAccepted : this.isAccepted,
     );
   }
 }
@@ -274,10 +241,6 @@ class CommentTable extends _i1.Table {
       'brandId',
       this,
     );
-    accepted_byId = _i1.ColumnInt(
-      'accepted_byId',
-      this,
-    );
     description = _i1.ColumnString(
       'description',
       this,
@@ -290,10 +253,9 @@ class CommentTable extends _i1.Table {
       'pictures',
       this,
     );
-    is_accepted = _i1.ColumnBool(
-      'is_accepted',
+    isAccepted = _i1.ColumnBool(
+      'isAccepted',
       this,
-      hasDefault: true,
     );
   }
 
@@ -307,17 +269,13 @@ class CommentTable extends _i1.Table {
 
   _i3.BrandTable? _brand;
 
-  late final _i1.ColumnInt accepted_byId;
-
-  _i4.ModeratorTable? _accepted_by;
-
   late final _i1.ColumnString description;
 
   late final _i1.ColumnDouble rating;
 
   late final _i1.ColumnSerializable pictures;
 
-  late final _i1.ColumnBool is_accepted;
+  late final _i1.ColumnBool isAccepted;
 
   _i2.UserTable get user {
     if (_user != null) return _user!;
@@ -345,30 +303,16 @@ class CommentTable extends _i1.Table {
     return _brand!;
   }
 
-  _i4.ModeratorTable get accepted_by {
-    if (_accepted_by != null) return _accepted_by!;
-    _accepted_by = _i1.createRelationTable(
-      relationFieldName: 'accepted_by',
-      field: Comment.t.accepted_byId,
-      foreignField: _i4.Moderator.t.id,
-      tableRelation: tableRelation,
-      createTable: (foreignTableRelation) =>
-          _i4.ModeratorTable(tableRelation: foreignTableRelation),
-    );
-    return _accepted_by!;
-  }
-
   @override
   List<_i1.Column> get columns => [
         id,
         name,
         userId,
         brandId,
-        accepted_byId,
         description,
         rating,
         pictures,
-        is_accepted,
+        isAccepted,
       ];
 
   @override
@@ -379,9 +323,6 @@ class CommentTable extends _i1.Table {
     if (relationField == 'brand') {
       return brand;
     }
-    if (relationField == 'accepted_by') {
-      return accepted_by;
-    }
     return null;
   }
 }
@@ -390,24 +331,19 @@ class CommentInclude extends _i1.IncludeObject {
   CommentInclude._({
     _i2.UserInclude? user,
     _i3.BrandInclude? brand,
-    _i4.ModeratorInclude? accepted_by,
   }) {
     _user = user;
     _brand = brand;
-    _accepted_by = accepted_by;
   }
 
   _i2.UserInclude? _user;
 
   _i3.BrandInclude? _brand;
 
-  _i4.ModeratorInclude? _accepted_by;
-
   @override
   Map<String, _i1.Include?> get includes => {
         'user': _user,
         'brand': _brand,
-        'accepted_by': _accepted_by,
       };
 
   @override
@@ -632,27 +568,6 @@ class CommentAttachRowRepository {
     await session.db.updateRow<Comment>(
       $comment,
       columns: [Comment.t.brandId],
-      transaction: transaction,
-    );
-  }
-
-  Future<void> accepted_by(
-    _i1.Session session,
-    Comment comment,
-    _i4.Moderator accepted_by, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (comment.id == null) {
-      throw ArgumentError.notNull('comment.id');
-    }
-    if (accepted_by.id == null) {
-      throw ArgumentError.notNull('accepted_by.id');
-    }
-
-    var $comment = comment.copyWith(accepted_byId: accepted_by.id);
-    await session.db.updateRow<Comment>(
-      $comment,
-      columns: [Comment.t.accepted_byId],
       transaction: transaction,
     );
   }

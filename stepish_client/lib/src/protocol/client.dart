@@ -11,8 +11,24 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:sneaker_client/src/protocol/brand.dart' as _i3;
-import 'protocol.dart' as _i4;
+import 'package:sneaker_client/src/protocol/comment.dart' as _i3;
+import 'package:sneaker_client/src/protocol/brand.dart' as _i4;
+import 'protocol.dart' as _i5;
+
+/// {@category Endpoint}
+class EndpointAuthEndPoint extends _i1.EndpointRef {
+  EndpointAuthEndPoint(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'authEndPoint';
+
+  _i2.Future<void> createComment(_i3.Comment comment) =>
+      caller.callServerEndpoint<void>(
+        'authEndPoint',
+        'createComment',
+        {'comment': comment},
+      );
+}
 
 /// {@category Endpoint}
 class EndpointBrandEndPoint extends _i1.EndpointRef {
@@ -21,24 +37,89 @@ class EndpointBrandEndPoint extends _i1.EndpointRef {
   @override
   String get name => 'brandEndPoint';
 
-  _i2.Future<void> createProduct(_i3.Brand product) =>
+  _i2.Future<void> createBrand(_i4.Brand product) =>
       caller.callServerEndpoint<void>(
         'brandEndPoint',
-        'createProduct',
+        'createBrand',
         {'product': product},
       );
 
-  _i2.Future<List<_i3.Brand>> getAllProduct() =>
-      caller.callServerEndpoint<List<_i3.Brand>>(
+  _i2.Future<List<_i4.Brand>> getAllBrands() =>
+      caller.callServerEndpoint<List<_i4.Brand>>(
         'brandEndPoint',
-        'getAllProduct',
+        'getAllBrands',
         {},
       );
 
-  _i2.Future<_i3.Brand?> getProductById(int id) =>
-      caller.callServerEndpoint<_i3.Brand?>(
+  _i2.Future<_i4.Brand?> getBrandById(int id) =>
+      caller.callServerEndpoint<_i4.Brand?>(
         'brandEndPoint',
-        'getProductById',
+        'getBrandById',
+        {'id': id},
+      );
+}
+
+/// {@category Endpoint}
+class EndpointCommentEndPoint extends _i1.EndpointRef {
+  EndpointCommentEndPoint(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'commentEndPoint';
+
+  _i2.Future<void> createComment(
+    _i3.Comment comment,
+    String? name,
+    int? brandId,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'commentEndPoint',
+        'createComment',
+        {
+          'comment': comment,
+          'name': name,
+          'brandId': brandId,
+        },
+      );
+
+  _i2.Future<List<_i3.Comment>> getAcceptedCommentByBrand(int brandId) =>
+      caller.callServerEndpoint<List<_i3.Comment>>(
+        'commentEndPoint',
+        'getAcceptedCommentByBrand',
+        {'brandId': brandId},
+      );
+
+  _i2.Future<List<_i3.Comment>> getUnAcceptedCommentByBrand(int brandId) =>
+      caller.callServerEndpoint<List<_i3.Comment>>(
+        'commentEndPoint',
+        'getUnAcceptedCommentByBrand',
+        {'brandId': brandId},
+      );
+
+  _i2.Future<List<_i3.Comment>> getAllUnAcceptedCommentByBrand() =>
+      caller.callServerEndpoint<List<_i3.Comment>>(
+        'commentEndPoint',
+        'getAllUnAcceptedCommentByBrand',
+        {},
+      );
+
+  _i2.Future<List<_i3.Comment>> getAllCommentByBrand(int brandId) =>
+      caller.callServerEndpoint<List<_i3.Comment>>(
+        'commentEndPoint',
+        'getAllCommentByBrand',
+        {'brandId': brandId},
+      );
+
+  _i2.Future<_i3.Comment?> getCommentById(int id) =>
+      caller.callServerEndpoint<_i3.Comment?>(
+        'commentEndPoint',
+        'getCommentById',
+        {'id': id},
+      );
+
+  _i2.Future<List<_i3.Comment>> deleteCommentById(int id) =>
+      caller.callServerEndpoint<List<_i3.Comment>>(
+        'commentEndPoint',
+        'deleteCommentById',
         {'id': id},
       );
 }
@@ -63,6 +144,34 @@ class EndpointExample extends _i1.EndpointRef {
       );
 }
 
+/// {@category Endpoint}
+class EndpointSessionEndPoint extends _i1.EndpointRef {
+  EndpointSessionEndPoint(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'sessionEndPoint';
+
+  _i2.Future<void> saveComment(
+    int brandId,
+    String? text,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'sessionEndPoint',
+        'saveComment',
+        {
+          'brandId': brandId,
+          'text': text,
+        },
+      );
+
+  _i2.Future<String> getComment(int brandId) =>
+      caller.callServerEndpoint<String>(
+        'sessionEndPoint',
+        'getComment',
+        {'brandId': brandId},
+      );
+}
+
 class Client extends _i1.ServerpodClientShared {
   Client(
     String host, {
@@ -79,7 +188,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i4.Protocol(),
+          _i5.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -89,18 +198,30 @@ class Client extends _i1.ServerpodClientShared {
           disconnectStreamsOnLostInternetConnection:
               disconnectStreamsOnLostInternetConnection,
         ) {
+    authEndPoint = EndpointAuthEndPoint(this);
     brandEndPoint = EndpointBrandEndPoint(this);
+    commentEndPoint = EndpointCommentEndPoint(this);
     example = EndpointExample(this);
+    sessionEndPoint = EndpointSessionEndPoint(this);
   }
+
+  late final EndpointAuthEndPoint authEndPoint;
 
   late final EndpointBrandEndPoint brandEndPoint;
 
+  late final EndpointCommentEndPoint commentEndPoint;
+
   late final EndpointExample example;
+
+  late final EndpointSessionEndPoint sessionEndPoint;
 
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
+        'authEndPoint': authEndPoint,
         'brandEndPoint': brandEndPoint,
+        'commentEndPoint': commentEndPoint,
         'example': example,
+        'sessionEndPoint': sessionEndPoint,
       };
 
   @override

@@ -24,9 +24,9 @@ final router = GoRouter(
                 builder: (BuildContext context, GoRouterState state) => const CatalogScreen(),
                 routes: [
                   GoRoute(
-                    path: '/product-details/:productId',
+                    path: '/product-details/:brandId',
                     builder: (BuildContext context, GoRouterState state) => ProductScreen(
-                      productId: int.parse(state.pathParameters['productId']!),
+                      brandId: int.parse(state.pathParameters['brandId']!),
                     ),
                   ),
                 ]),

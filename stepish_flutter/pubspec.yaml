@@ -15,6 +15,9 @@ dependencies:
   go_router:
   gap:
   rxdart:
+  serverpod_auth_server: ^2.3.0
+  platform_device_id: ^1.0.1
+  easy_debounce: ^2.0.3
   cached_network_image:
   shared_preferences:
 

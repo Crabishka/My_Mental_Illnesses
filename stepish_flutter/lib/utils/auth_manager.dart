@@ -1,5 +1,7 @@
+import 'package:platform_device_id/platform_device_id.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sneaker_client/sneaker_client.dart';
+import 'package:sneaker_flutter/main.dart';
 
 const accessKey = 'ACCESS_KEY';
 const refreshKey = 'REFRESH_KEY';
@@ -9,7 +11,7 @@ class JwtAuthManager extends AuthenticationKeyManager {
   SharedPreferences? _sharedPreferences;
 
   Future<void> init() async {
-    _sharedPreferences = await SharedPreferences.getInstance();
+    _key ??= await PlatformDeviceId.getDeviceId;
   }
 
   Future<String?> _getAccess() async {
@@ -28,18 +30,22 @@ class JwtAuthManager extends AuthenticationKeyManager {
     _sharedPreferences?.setString(refreshKey, token);
   }
 
+  String? _key;
+
   @override
   Future<String?> get() async {
-    return _getAccess();
+    _key ??= await PlatformDeviceId.getDeviceId;
+    return _key;
+    // return _getAccess();
   }
 
   @override
   Future<void> put(String key) async {
-    throw _putAccess(key);
+    // throw _putAccess(key);
   }
 
   @override
   Future<void> remove() async {
-    _sharedPreferences?.remove(accessKey);
+    // _sharedPreferences?.remove(accessKey);
   }
 }

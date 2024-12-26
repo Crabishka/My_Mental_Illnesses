@@ -8,4 +8,4 @@ fields:
   pictures: List<String>?
   manufacturer: Manufacturer?, relation(name=brand_manufacturer)
   comments: List<Comment>?, relation(name=brand_comments)
-  is_accepted: bool, default = false
+  isAccepted: bool, default = false

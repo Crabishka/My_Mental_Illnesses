@@ -24,8 +24,8 @@ abstract class Brand implements _i1.TableRow, _i1.ProtocolSerialization {
     required this.manufacturerId,
     this.manufacturer,
     this.comments,
-    bool? is_accepted,
-  }) : is_accepted = is_accepted ?? false;
+    bool? isAccepted,
+  }) : isAccepted = isAccepted ?? false;
 
   factory Brand({
     int? id,
@@ -37,7 +37,7 @@ abstract class Brand implements _i1.TableRow, _i1.ProtocolSerialization {
     required int manufacturerId,
     _i2.Manufacturer? manufacturer,
     List<_i3.Comment>? comments,
-    bool? is_accepted,
+    bool? isAccepted,
   }) = _BrandImpl;
 
   factory Brand.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -58,7 +58,7 @@ abstract class Brand implements _i1.TableRow, _i1.ProtocolSerialization {
       comments: (jsonSerialization['comments'] as List?)
           ?.map((e) => _i3.Comment.fromJson((e as Map<String, dynamic>)))
           .toList(),
-      is_accepted: jsonSerialization['is_accepted'] as bool,
+      isAccepted: jsonSerialization['isAccepted'] as bool,
     );
   }
 
@@ -85,7 +85,7 @@ abstract class Brand implements _i1.TableRow, _i1.ProtocolSerialization {
 
   List<_i3.Comment>? comments;
 
-  bool is_accepted;
+  bool isAccepted;
 
   @override
   _i1.Table get table => t;
@@ -100,7 +100,7 @@ abstract class Brand implements _i1.TableRow, _i1.ProtocolSerialization {
     int? manufacturerId,
     _i2.Manufacturer? manufacturer,
     List<_i3.Comment>? comments,
-    bool? is_accepted,
+    bool? isAccepted,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -115,7 +115,7 @@ abstract class Brand implements _i1.TableRow, _i1.ProtocolSerialization {
       if (manufacturer != null) 'manufacturer': manufacturer?.toJson(),
       if (comments != null)
         'comments': comments?.toJson(valueToJson: (v) => v.toJson()),
-      'is_accepted': is_accepted,
+      'isAccepted': isAccepted,
     };
   }
 
@@ -133,7 +133,7 @@ abstract class Brand implements _i1.TableRow, _i1.ProtocolSerialization {
         'manufacturer': manufacturer?.toJsonForProtocol(),
       if (comments != null)
         'comments': comments?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
-      'is_accepted': is_accepted,
+      'isAccepted': isAccepted,
     };
   }
 
@@ -186,7 +186,7 @@ class _BrandImpl extends Brand {
     required int manufacturerId,
     _i2.Manufacturer? manufacturer,
     List<_i3.Comment>? comments,
-    bool? is_accepted,
+    bool? isAccepted,
   }) : super._(
           id: id,
           name: name,
@@ -197,7 +197,7 @@ class _BrandImpl extends Brand {
           manufacturerId: manufacturerId,
           manufacturer: manufacturer,
           comments: comments,
-          is_accepted: is_accepted,
+          isAccepted: isAccepted,
         );
 
   @override
@@ -211,7 +211,7 @@ class _BrandImpl extends Brand {
     int? manufacturerId,
     Object? manufacturer = _Undefined,
     Object? comments = _Undefined,
-    bool? is_accepted,
+    bool? isAccepted,
   }) {
     return Brand(
       id: id is int? ? id : this.id,
@@ -229,7 +229,7 @@ class _BrandImpl extends Brand {
       comments: comments is List<_i3.Comment>?
           ? comments
           : this.comments?.map((e0) => e0.copyWith()).toList(),
-      is_accepted: is_accepted ?? this.is_accepted,
+      isAccepted: isAccepted ?? this.isAccepted,
     );
   }
 }
@@ -260,8 +260,8 @@ class BrandTable extends _i1.Table {
       'manufacturerId',
       this,
     );
-    is_accepted = _i1.ColumnBool(
-      'is_accepted',
+    isAccepted = _i1.ColumnBool(
+      'isAccepted',
       this,
       hasDefault: true,
     );
@@ -285,7 +285,7 @@ class BrandTable extends _i1.Table {
 
   _i1.ManyRelation<_i3.CommentTable>? _comments;
 
-  late final _i1.ColumnBool is_accepted;
+  late final _i1.ColumnBool isAccepted;
 
   _i2.ManufacturerTable get manufacturer {
     if (_manufacturer != null) return _manufacturer!;
@@ -340,7 +340,7 @@ class BrandTable extends _i1.Table {
         oldPrice,
         pictures,
         manufacturerId,
-        is_accepted,
+        isAccepted,
       ];
 
   @override

@@ -4,4 +4,4 @@ fields:
   name: String
   login: String
   password: String
-  accepted_comments: List<Comment>?,relation(name=moderator_comments)
+#  acceptedComments: List<Comment>?,relation(name=moderator_comments)

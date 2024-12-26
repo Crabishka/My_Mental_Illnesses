@@ -12,7 +12,6 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'user.dart' as _i2;
 import 'brand.dart' as _i3;
-import 'moderator.dart' as _i4;
 
 abstract class Comment implements _i1.SerializableModel {
   Comment._({
@@ -22,13 +21,10 @@ abstract class Comment implements _i1.SerializableModel {
     this.user,
     required this.brandId,
     this.brand,
-    required this.accepted_byId,
-    this.accepted_by,
     this.description,
     required this.rating,
     this.pictures,
-    bool? is_accepted,
-  }) : is_accepted = is_accepted ?? false;
+  });
 
   factory Comment({
     int? id,
@@ -37,12 +33,9 @@ abstract class Comment implements _i1.SerializableModel {
     _i2.User? user,
     required int brandId,
     _i3.Brand? brand,
-    required int accepted_byId,
-    _i4.Moderator? accepted_by,
     String? description,
     required double rating,
     List<String>? pictures,
-    bool? is_accepted,
   }) = _CommentImpl;
 
   factory Comment.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -59,17 +52,11 @@ abstract class Comment implements _i1.SerializableModel {
           ? null
           : _i3.Brand.fromJson(
               (jsonSerialization['brand'] as Map<String, dynamic>)),
-      accepted_byId: jsonSerialization['accepted_byId'] as int,
-      accepted_by: jsonSerialization['accepted_by'] == null
-          ? null
-          : _i4.Moderator.fromJson(
-              (jsonSerialization['accepted_by'] as Map<String, dynamic>)),
       description: jsonSerialization['description'] as String?,
       rating: (jsonSerialization['rating'] as num).toDouble(),
       pictures: (jsonSerialization['pictures'] as List?)
           ?.map((e) => e as String)
           .toList(),
-      is_accepted: jsonSerialization['is_accepted'] as bool,
     );
   }
 
@@ -88,17 +75,11 @@ abstract class Comment implements _i1.SerializableModel {
 
   _i3.Brand? brand;
 
-  int accepted_byId;
-
-  _i4.Moderator? accepted_by;
-
   String? description;
 
   double rating;
 
   List<String>? pictures;
-
-  bool is_accepted;
 
   Comment copyWith({
     int? id,
@@ -107,12 +88,9 @@ abstract class Comment implements _i1.SerializableModel {
     _i2.User? user,
     int? brandId,
     _i3.Brand? brand,
-    int? accepted_byId,
-    _i4.Moderator? accepted_by,
     String? description,
     double? rating,
     List<String>? pictures,
-    bool? is_accepted,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -123,12 +101,9 @@ abstract class Comment implements _i1.SerializableModel {
       if (user != null) 'user': user?.toJson(),
       'brandId': brandId,
       if (brand != null) 'brand': brand?.toJson(),
-      'accepted_byId': accepted_byId,
-      if (accepted_by != null) 'accepted_by': accepted_by?.toJson(),
       if (description != null) 'description': description,
       'rating': rating,
       if (pictures != null) 'pictures': pictures?.toJson(),
-      'is_accepted': is_accepted,
     };
   }
 
@@ -148,12 +123,9 @@ class _CommentImpl extends Comment {
     _i2.User? user,
     required int brandId,
     _i3.Brand? brand,
-    required int accepted_byId,
-    _i4.Moderator? accepted_by,
     String? description,
     required double rating,
     List<String>? pictures,
-    bool? is_accepted,
   }) : super._(
           id: id,
           name: name,
@@ -161,12 +133,9 @@ class _CommentImpl extends Comment {
           user: user,
           brandId: brandId,
           brand: brand,
-          accepted_byId: accepted_byId,
-          accepted_by: accepted_by,
           description: description,
           rating: rating,
           pictures: pictures,
-          is_accepted: is_accepted,
         );
 
   @override
@@ -177,12 +146,9 @@ class _CommentImpl extends Comment {
     Object? user = _Undefined,
     int? brandId,
     Object? brand = _Undefined,
-    int? accepted_byId,
-    Object? accepted_by = _Undefined,
     Object? description = _Undefined,
     double? rating,
     Object? pictures = _Undefined,
-    bool? is_accepted,
   }) {
     return Comment(
       id: id is int? ? id : this.id,
@@ -191,16 +157,11 @@ class _CommentImpl extends Comment {
       user: user is _i2.User? ? user : this.user?.copyWith(),
       brandId: brandId ?? this.brandId,
       brand: brand is _i3.Brand? ? brand : this.brand?.copyWith(),
-      accepted_byId: accepted_byId ?? this.accepted_byId,
-      accepted_by: accepted_by is _i4.Moderator?
-          ? accepted_by
-          : this.accepted_by?.copyWith(),
       description: description is String? ? description : this.description,
       rating: rating ?? this.rating,
       pictures: pictures is List<String>?
           ? pictures
           : this.pictures?.map((e0) => e0).toList(),
-      is_accepted: is_accepted ?? this.is_accepted,
     );
   }
 }
